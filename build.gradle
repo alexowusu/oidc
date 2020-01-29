@@ -15,6 +15,7 @@ repositories {
 dependencies {
 //	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'commons-codec:commons-codec:1.14'
 //	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
@@ -24,6 +25,8 @@ dependencies {
 	compile("io.springfox:springfox-swagger-ui:2.9.2")
 	compile("com.google.api-client:google-api-client:1.30.7")
 
+	compile 'com.google.api-client:google-api-client:1.30.5'
+	compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.9.4")
 
 
 }
