@@ -14,7 +14,6 @@ import java.util.Optional;
 public class TokenValidation {
 
     public static boolean isTokenValidated(String jwts, RSAPublicKey  pubKey) {
-
         boolean iss = Jwts.parser().setSigningKey(pubKey).parseClaimsJws(jwts).getBody().get("iss").equals("https://accounts.google.com");
         boolean aud = Jwts.parser().setSigningKey(pubKey).parseClaimsJws(jwts).getBody().get("aud").equals("859455735473-bgmqqco3q588kgaog0g2k0fmnur5qvf9.apps.googleusercontent.com");
         boolean hd = Jwts.parser().setSigningKey(pubKey).parseClaimsJws(jwts).getBody().get("hd").equals("turntabl.io");

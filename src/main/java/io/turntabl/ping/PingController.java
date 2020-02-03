@@ -1,13 +1,11 @@
 package io.turntabl.ping;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 import io.turntabl.tokenVerifier.TokenValidation;
 import org.springframework.web.bind.annotation.*;
-
 
 @Api
 @RestController
