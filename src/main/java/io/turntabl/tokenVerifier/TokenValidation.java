@@ -13,10 +13,15 @@ import java.util.Optional;
 
 public class TokenValidation {
 
-    public static boolean isTokenValidated(String jwts, RSAPublicKey  pubKey) {
-        boolean iss = Jwts.parser().setSigningKey(pubKey).parseClaimsJws(jwts).getBody().get("iss").equals("https://accounts.google.com");
-        boolean aud = Jwts.parser().setSigningKey(pubKey).parseClaimsJws(jwts).getBody().get("aud").equals("859455735473-bgmqqco3q588kgaog0g2k0fmnur5qvf9.apps.googleusercontent.com");
-        boolean hd = Jwts.parser().setSigningKey(pubKey).parseClaimsJws(jwts).getBody().get("hd").equals("turntabl.io");
+    public static boolean isTokenValidated(String jwt, RSAPublicKey  pubKey) {
+
+        String ISSUER = System.getenv("ISSUER");
+        String CLIENT_ID = System.getenv("CLIENT_ID");
+        String HOST_DOMAIN = System.getenv("HOST_DOMAIN");
+
+        boolean iss = Jwts.parser().setSigningKey(pubKey).parseClaimsJws(jwt).getBody().get("iss").equals(ISSUER);
+        boolean aud = Jwts.parser().setSigningKey(pubKey).parseClaimsJws(jwt).getBody().get("aud").equals(CLIENT_ID);
+        boolean hd = Jwts.parser().setSigningKey(pubKey).parseClaimsJws(jwt).getBody().get("hd").equals(HOST_DOMAIN);
 
         return iss && aud && hd;
     }
@@ -28,14 +33,8 @@ public class TokenValidation {
     }
 
     public static Optional<RSAPublicKey> getPublicKey(){
-        String publicKeyPEM ="MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqOcCdoOH4mcM7oyR6Sur" +
-                "Q50dQLRkOjM4e4TbCZAHpBX5rdY4wK+jKjvrwJoFQ220G47BypMnnXBFjd7WbO5i" +
-                "QQzP6oIzwQF+7JI2hzqUUSNc44rYldunmjshl+xXplPuvRqcAQn9s3XM8NkbXcuM" +
-                "Q3azZO0ZL7XIhm3Zah5Hhc0MVbQxMiUSK2A7phV5JXS4fUJhfKb02RIj/ZtbgpJU" +
-                "o2A7IUzvgQHFiKf+AhVYiwKY2nuIdUbOyTY0JYw6KW4U8rv8Aga2H4WhGy7jlcZs" +
-                "wwmnJMzergQP3Wuq41Ap/13Kc5XXt18sWMD6ixYCOU6lPCco0hr7iO+V1t59oDfg" +
-                "JwIDAQAB" ;
-        X509EncodedKeySpec keySpecX509 = new X509EncodedKeySpec(Base64.getDecoder().decode(publicKeyPEM));
+        String PUBLIC_KEY =System.getenv("PUBLIC_KEY") ;
+        X509EncodedKeySpec keySpecX509 = new X509EncodedKeySpec(Base64.getDecoder().decode(PUBLIC_KEY));
 
         try {
             KeyFactory kf = KeyFactory.getInstance("RSA");
@@ -43,9 +42,8 @@ public class TokenValidation {
             return Optional.of(pubKey);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             e.printStackTrace();
-            System.out.println("Exception block ");
+            System.out.println("Exception block | Invalid public key ");
             return Optional.empty();
         }
-
     }
 }
