@@ -14,11 +14,10 @@ import java.util.Optional;
 public class TokenValidation {
 
     public static boolean isTokenValidated(String jwts, RSAPublicKey  pubKey) {
-        String jwt2 = "eyJhbGciOiJSUzI1NiIsImtpZCI6ImIyZWQwZGIxZjY2MWQ4OTg5OTY5YmFiNzhkMmZhZTc1NjRmZGMzYTkiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI4NTk0NTU3MzU0NzMtYmdtcXFjbzNxNTg4a2dhb2cwZzJrMGZtbnVyNXF2ZjkuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI4NTk0NTU3MzU0NzMtYmdtcXFjbzNxNTg4a2dhb2cwZzJrMGZtbnVyNXF2ZjkuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDI5MjQzNjgwNzQxMTUxMjY4MTciLCJoZCI6InR1cm50YWJsLmlvIiwiZW1haWwiOiJqb2huLmVyYnlubkB0dXJudGFibC5pbyIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiOHpUZTN1N2EwTlh4VUk5SHR3SEZwZyIsIm5hbWUiOiJKb2huIEVyYnlubiIsImdpdmVuX25hbWUiOiJKb2huIiwiZmFtaWx5X25hbWUiOiJFcmJ5bm4iLCJsb2NhbGUiOiJlbiIsImlhdCI6MTU4MDc0NzcyNywiZXhwIjoxNTgwNzUxMzI3fQ.QYqpnXDG3iq_31CGsisNyR_atmzt2Go0yKA47RJQPj3Ez1i8WKQ05RVbuoW-IYzVJKwQ0iPHJRVPpYRpSIbZa7gliv8zi4Qkiw7a5bZtSDSmRnxjBnjTJKVyzbjsleNx2SDDE5mJS4nXmLovzBn1YFtaRvBhKBZMQAnq-fb88YMsmF36fbtrlAlNakxQSr8nicHmlY6fmb-UZc1raPCQdfWX_92Y_H6FWLqx89EpYEbGaS9BIx6wITl0NyPINPcVd5civ0z40656YjMcpzHCJpi6G34W0VX9NeHhurVi6zMPcxN8bJva_ESG1nge2454gxK9EZCAp2YKHrDipXZVag";
 
-        boolean iss = Jwts.parser().setSigningKey(pubKey).parseClaimsJws(jwt2).getBody().get("iss").equals("https://accounts.google.com");
-        boolean aud = Jwts.parser().setSigningKey(pubKey).parseClaimsJws(jwt2).getBody().get("aud").equals("859455735473-bgmqqco3q588kgaog0g2k0fmnur5qvf9.apps.googleusercontent.com");
-        boolean hd = Jwts.parser().setSigningKey(pubKey).parseClaimsJws(jwt2).getBody().get("hd").equals("turntabl.io");
+        boolean iss = Jwts.parser().setSigningKey(pubKey).parseClaimsJws(jwts).getBody().get("iss").equals("https://accounts.google.com");
+        boolean aud = Jwts.parser().setSigningKey(pubKey).parseClaimsJws(jwts).getBody().get("aud").equals("859455735473-bgmqqco3q588kgaog0g2k0fmnur5qvf9.apps.googleusercontent.com");
+        boolean hd = Jwts.parser().setSigningKey(pubKey).parseClaimsJws(jwts).getBody().get("hd").equals("turntabl.io");
 
         return iss && aud && hd;
     }
@@ -45,6 +44,7 @@ public class TokenValidation {
             return Optional.of(pubKey);
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             e.printStackTrace();
+            System.out.println("Exception block ");
             return Optional.empty();
         }
 

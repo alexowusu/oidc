@@ -14,6 +14,7 @@ import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
+import java.util.Optional;
 
 
 @Api
@@ -25,6 +26,29 @@ public class PingController {
     @GetMapping(value = "v1/api/ping")
     public String ping(){
         return "Hello pong from Ping endpoint";
+    }
+
+    // functional
+    @CrossOrigin
+    @ApiOperation("validate token")
+    @GetMapping(value = "/validateToken")
+    public boolean isValid(){
+        String jwt = "eyJhbGciOiJSUzI1NiIsImtpZCI6ImIyZWQwZGIxZjY2MWQ4OTg5OTY5YmFiNzhkMmZhZTc1NjRmZGMzYTkiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI4NTk0NTU3MzU0NzMtYmdtcXFjbzNxNTg4a2dhb2cwZzJrMGZtbnVyNXF2ZjkuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI4NTk0NTU3MzU0NzMtYmdtcXFjbzNxNTg4a2dhb2cwZzJrMGZtbnVyNXF2ZjkuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDI5MjQzNjgwNzQxMTUxMjY4MTciLCJoZCI6InR1cm50YWJsLmlvIiwiZW1haWwiOiJqb2huLmVyYnlubkB0dXJudGFibC5pbyIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiRnh6UWNNSXdQMHVKMDN0aWVfU2pHQSIsIm5hbWUiOiJKb2huIEVyYnlubiIsImdpdmVuX25hbWUiOiJKb2huIiwiZmFtaWx5X25hbWUiOiJFcmJ5bm4iLCJsb2NhbGUiOiJlbiIsImlhdCI6MTU4MDc1MzExMiwiZXhwIjoxNTgwNzU2NzEyfQ.YbK1fDL9a64JA_2kvabKw_YgkedqibJuRHAEsfz-qJuZSYymSi5nOAM19M5nH2P-UjGxEc3s_QgV7p7oDTHgaIhliqntAXJ1qCnIfMEEbNwsZjUVeGgjVmyV8m_Aq2ELKBxQhwOZdzdJwGacMnAPbxvEYIuJ5Tc1_3yVX4prpPJs9ELjJJY8OP7lgFTXiZQYLwzOWOWcHa9y3hTe54XF8NbT7RBFI4atd9HtJEyQt0b-pcf1GQnY-nIioY-6Rdlhf6q9rth5zgRFSwgFDxkEzPGArB1zs6CiOTkQVoy_JyxJYwgC2Jt8t1yKyQ6yRDutVHjejtaOILx7nRhwxcdc8w";
+
+        if (TokenValidation.getPublicKey().isPresent()){
+            Claims claim = TokenValidation.getClaim(TokenValidation.getPublicKey().get(), jwt);
+            System.out.println(claim);
+
+            boolean tokenValidated = TokenValidation.isTokenValidated(jwt, TokenValidation.getPublicKey().get());
+            System.out.println(">>>>> Validation successful :)");
+            return tokenValidated;
+        }
+        else {
+            System.out.println("Public Key not present");
+            System.out.println(">>>>> Validation unsuccessful :)");
+            return false;
+        }
+
     }
 
     @CrossOrigin
@@ -73,6 +97,8 @@ public class PingController {
         return false;
     }
 
+
+    ////// old \\\\\\\\
     @CrossOrigin
     @ApiOperation("verify token test")
     @GetMapping(value = "/verifytest")
@@ -107,9 +133,12 @@ public class PingController {
         boolean hd = Jwts.parser().setSigningKey(pubKey).parseClaimsJws(jwt2).getBody().get("hd").equals("turntabl.io");
         System.out.println(hd);
 
-        if (TokenValidation.getPublicKey().isPresent()){
-            TokenValidation.getClaim(TokenValidation.getPublicKey().get(), "");
-        }
+//        if (TokenValidation.getPublicKey().isPresent()){
+//            TokenValidation.getClaim(TokenValidation.getPublicKey().get(), "");
+//        }
+//        else {
+//            System.out.println("Public Key not present");
+//        }
 
 //        assert joe;
         System.out.println(">>>>>>> ");
