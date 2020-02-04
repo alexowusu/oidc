@@ -22,13 +22,21 @@ public class PingController {
     @ApiOperation("validate token")
     @PostMapping(value = "v1/api/validateToken")
     public boolean isTokenValid(@RequestHeader (name="Authorization") String tokenId){
+        if (!(tokenId.startsWith("Bearer "))) {
+            return false;
+        }
+
         String jwt = tokenId.replace("Bearer ", "");
 
-        if (TokenValidation.getPublicKey().isPresent()){
-            Claims claim = TokenValidation.getClaim(TokenValidation.getPublicKey().get(), jwt);
+        if (TokenValidation.getParsedPublicKey().isPresent()){
+            Claims claim = TokenValidation.getClaim(TokenValidation.getParsedPublicKey().get(), jwt);
             System.out.println(claim);
 
-            boolean tokenValidated = TokenValidation.isTokenValidated(jwt, TokenValidation.getPublicKey().get());
+            if (claim.isEmpty()) {
+                return false;
+            }
+
+            boolean tokenValidated = TokenValidation.isTokenValidated(jwt, TokenValidation.getParsedPublicKey().get());
             System.out.println(">>>>> Validation successful :)");
             return tokenValidated;
         }

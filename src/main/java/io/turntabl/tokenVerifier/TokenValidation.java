@@ -9,6 +9,7 @@ import java.security.interfaces.RSAPublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
+import java.util.Date;
 import java.util.Optional;
 
 public class TokenValidation {
@@ -32,18 +33,28 @@ public class TokenValidation {
                 .parseClaimsJws(jwts).getBody();
     }
 
-    public static Optional<RSAPublicKey> getPublicKey(){
+    public static Optional<RSAPublicKey> getParsedPublicKey(){
         String PUBLIC_KEY =System.getenv("PUBLIC_KEY") ;
-        X509EncodedKeySpec keySpecX509 = new X509EncodedKeySpec(Base64.getDecoder().decode(PUBLIC_KEY));
 
         try {
-            KeyFactory kf = KeyFactory.getInstance("RSA");
-            RSAPublicKey pubKey = (RSAPublicKey) kf.generatePublic(keySpecX509);
+            byte[] decode = com.google.api.client.util.Base64.decodeBase64(PUBLIC_KEY);
+//            byte[] decode2 = Base64.getDecoder().decode(PUBLIC_KEY);
+            X509EncodedKeySpec keySpecX509 = new X509EncodedKeySpec(decode);
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            RSAPublicKey pubKey = (RSAPublicKey) keyFactory.generatePublic(keySpecX509);
             return Optional.of(pubKey);
+
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
             e.printStackTrace();
-            System.out.println("Exception block | Invalid public key ");
+            System.out.println("Exception block | Invalid public key | Parsing error ");
             return Optional.empty();
         }
     }
+
+//    public static boolean isTokenExpired(String token) {
+//        final Claims claims = extractClaims(token);
+//        Date now = new Date();
+//        System.out.println(now.getTime());
+//        return now.after(claims.getExpiration());
+//    }
 }
