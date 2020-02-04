@@ -32,6 +32,11 @@ dependencies {
 
 	compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.1'
     compile 'com.google.api-client:google-api-client:1.30.7'
+
+//	compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: '2.2.4.RELEASE'
+//	compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: '2.2.4.RELEASE'
+
+
 }
 
 test {

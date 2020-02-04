@@ -1,4 +1,4 @@
-package io.turntabl.ping;
+package io.turntabl.resource;
 
 import io.jsonwebtoken.*;
 import io.swagger.annotations.Api;
