@@ -25,16 +25,17 @@ public class PingController {
         if (!(tokenId.startsWith("Bearer "))) {
             return false;
         }
-
         String jwt = tokenId.replace("Bearer ", "");
 
         if (TokenValidation.getParsedPublicKey().isPresent()){
             Claims claim = TokenValidation.getClaim(TokenValidation.getParsedPublicKey().get(), jwt);
-            System.out.println(claim);
+            System.out.println(claim.getExpiration());
 
-            if (claim.isEmpty()) {
-                return false;
-            }
+            boolean tokenExpired = TokenValidation.isTokenExpired(claim);
+            System.out.println(">>>>>>> ");
+            System.out.println(tokenExpired);
+
+            if (claim.isEmpty() && tokenExpired) {return false;}
 
             boolean tokenValidated = TokenValidation.isTokenValidated(jwt, TokenValidation.getParsedPublicKey().get());
             System.out.println(">>>>> Validation successful :)");

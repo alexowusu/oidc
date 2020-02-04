@@ -39,9 +39,8 @@ public class TokenValidation {
         try {
             byte[] decode = com.google.api.client.util.Base64.decodeBase64(PUBLIC_KEY);
 //            byte[] decode2 = Base64.getDecoder().decode(PUBLIC_KEY);
-            X509EncodedKeySpec keySpecX509 = new X509EncodedKeySpec(decode);
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-            RSAPublicKey pubKey = (RSAPublicKey) keyFactory.generatePublic(keySpecX509);
+            RSAPublicKey pubKey = (RSAPublicKey) keyFactory.generatePublic(new X509EncodedKeySpec(decode));
             return Optional.of(pubKey);
 
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
@@ -51,10 +50,8 @@ public class TokenValidation {
         }
     }
 
-//    public static boolean isTokenExpired(String token) {
-//        final Claims claims = extractClaims(token);
-//        Date now = new Date();
-//        System.out.println(now.getTime());
-//        return now.after(claims.getExpiration());
-//    }
+    public static boolean isTokenExpired(Claims claims) {
+        Date now = new Date();
+        return now.after(claims.getExpiration());
+    }
 }
