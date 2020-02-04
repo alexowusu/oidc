@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-//@Api
+@Api
 @RestController
 @RequestMapping("v1/api/hello")
 public class HelloResource {
