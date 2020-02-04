@@ -1,4 +1,4 @@
-package io.turntabl.resource;
+package io.turntabl.ping;
 
 import io.jsonwebtoken.*;
 import io.swagger.annotations.Api;
@@ -25,7 +25,6 @@ public class PingController {
         if (!(tokenId.startsWith("Bearer "))) {
             return false;
         }
-
         String jwt = tokenId.replace("Bearer ", "");
 
         if (TokenValidation.getParsedPublicKey().isPresent()){
