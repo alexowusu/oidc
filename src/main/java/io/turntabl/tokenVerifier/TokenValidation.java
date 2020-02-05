@@ -50,11 +50,4 @@ public class TokenValidation {
             return Optional.empty();
         }
     }
-
-//    public static boolean isTokenExpired(String token) {
-//        final Claims claims = extractClaims(token);
-//        Date now = new Date();
-//        System.out.println(now.getTime());
-//        return now.after(claims.getExpiration());
-//    }
 }
