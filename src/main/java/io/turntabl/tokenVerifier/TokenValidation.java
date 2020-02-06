@@ -15,7 +15,6 @@ import java.util.Optional;
 public class TokenValidation {
 
     public static boolean isTokenValidated(String jwt, RSAPublicKey  pubKey) {
-
         String ISSUER = System.getenv("ISSUER");
         String CLIENT_ID = System.getenv("CLIENT_ID");
         String HOST_DOMAIN = System.getenv("HOST_DOMAIN");
@@ -40,7 +39,6 @@ public class TokenValidation {
         String PUBLIC_KEY = "";
         if (!PUB_KEY.isEmpty()) {
             PUBLIC_KEY = PUB_KEY.replace(" ", "");
-            System.out.println( "PUB_KEY: " + PUBLIC_KEY);
         }
 
         try {
