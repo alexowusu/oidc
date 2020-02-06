@@ -27,21 +27,26 @@ public class TokenValidation {
         return iss && aud && hd;
     }
 
-    public static Claims getClaim(RSAPublicKey pubKey, String jwts ){
-        return Jwts.parser()
-                .setSigningKey(pubKey)
-                .parseClaimsJws(jwts).getBody();
-    }
+//    public static Claims getClaim(RSAPublicKey pubKey, String jwts ){
+//        return Jwts.parser()
+//                .setSigningKey(pubKey)
+//                .parseClaimsJws(jwts).getBody();
+//    }
 
     public static Optional<RSAPublicKey> getParsedPublicKey(){
-        String PUBLIC_KEY =System.getenv("PUBLIC_KEY") ;
+        String PUB_KEY = System.getenv("PUBLIC_KEY") ;
+
+        // removes white spaces(char 20)
+        String PUBLIC_KEY = "";
+        if (!PUB_KEY.isEmpty()) {
+            PUBLIC_KEY = PUB_KEY.replace(" ", "");
+            System.out.println( "PUB_KEY: " + PUBLIC_KEY);
+        }
 
         try {
-            byte[] decode = com.google.api.client.util.Base64.decodeBase64(PUBLIC_KEY);
-//            byte[] decode2 = Base64.getDecoder().decode(PUBLIC_KEY);
-            X509EncodedKeySpec keySpecX509 = new X509EncodedKeySpec(decode);
-            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-            RSAPublicKey pubKey = (RSAPublicKey) keyFactory.generatePublic(keySpecX509);
+//            X509EncodedKeySpec keySpecX509 = new X509EncodedKeySpec(com.google.api.client.util.Base64.decodeBase64(PUBLIC_KEY));  // alt B
+            X509EncodedKeySpec keySpecX509 = new X509EncodedKeySpec(Base64.getDecoder().decode(PUBLIC_KEY));
+            RSAPublicKey pubKey = (RSAPublicKey) KeyFactory.getInstance("RSA").generatePublic(keySpecX509);
             return Optional.of(pubKey);
 
         } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
