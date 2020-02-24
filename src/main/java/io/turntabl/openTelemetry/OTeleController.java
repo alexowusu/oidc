@@ -37,4 +37,10 @@ public class OTeleController {
         }
     }
 
+
+    @GetMapping("api/v1/noopentelemetry")
+    public String noOpenTelemetry() {
+       return "NO tracing :)";
+    }
+
 }
